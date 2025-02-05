@@ -1,0 +1,141 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.header{
+    background-color: rgb(220, 70, 70);
+    padding: 4vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+ .logo-heading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+ }
+
+ .logo{
+    height: 50px;
+    width: 70px;
+    border-radius: 100%;
+ }
+.heading{
+    color: white;
+    font-size: 40px;
+}
+
+.links{
+    color: white;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+a{
+    color: white;
+    text-decoration: none;
+}
+
+a:visited {
+    color: white;
+}
+
+a:active {
+    color: gray;
+}
+
+a:hover {
+    color: gold;
+    
+}
+
+.background{
+    height: 85.1vh;
+    background-image: url("./products/bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-size: 40px;
+    color: white;
+    padding: 2px;
+}
+
+.taglines{
+    margin-left: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    gap: 50px;
+    margin-top: 100px;
+    transform: translateX(-100%);
+    animation: slideInLeft 2s forwards;
+}
+
+.cards{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+    gap: 50px;
+    margin-bottom: 50px;
+    
+    animation: fadeIn 2s forwards;
+
+}
+
+.single-card{
+ background-color: beige;
+ padding: 5px;
+ border-radius: 20px;
+ height: 400px;
+ width: 300px;
+ display: flex;
+ flex-direction: column;
+ gap: 5px;
+text-align: center;
+}
+
+.image{
+    height: 250px;
+    width: 300px;
+    border-radius: 20px;
+}
+
+.button{
+    background-color: rgb(74, 225, 74);
+    padding: 10px;
+    font-size: larger;
+    font-family: serif;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+
+}
+
+.cart{
+    height: 30px;
+    border-radius: 100%;
+}
+
+@keyframes fadeIn {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+@keyframes slideInLeft {
+    to{
+        transform: translateX(0);
+    }
+}

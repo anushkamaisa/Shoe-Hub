@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BLOOM - Sports Shoes</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .popup-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-heading">
+            <img class="logo" src="./products/logo.jpg" />
+            <a href="index.html" class="heading">BLOOM</a>
+        </div>
+
+        <div class="links">
+            <a href="SportsShoes.html">Sports Shoes</a>
+            <a href="FormalShoes.html">Formal Shoes</a>
+            <a href="cart.html">Cart</a>
+            <a href="contactus.html">Contact Us</a>
+        </div>
+    </div>
+
+    <div class="cards">
+        <div class="single-card">
+            <img class="image" src="./products/brand.jpeg" />
+            <h1 class="name">Adidas</h1>
+            <p class="desc">A very nice comfy shoe for running</p>
+            <p class="price">$1800</p>
+            <button class="button">
+                <img class="cart" src="./products/cart.png" />
+                Add to cart
+            </button>
+        </div>
+
+        <div class="single-card">
+            <img class="image" src="./products/new.jpeg" />
+            <h1 class="name">Nike</h1>
+            <p class="desc">A very nice comfy shoe for running</p>
+            <p class="price">$1600</p>
+            <button class="button">
+                <img class="cart" src="./products/cart.png" />
+                Add to cart
+            </button>
+        </div>
+
+        <div class="single-card">
+            <img class="image" src="./products/style.jpeg" />
+            <h1 class="name">Puma</h1>
+            <p class="desc">A very nice comfy shoe for running</p>
+            <p class="price">$1200</p>
+            <button class="button">
+                <img class="cart" src="./products/cart.png" />
+                Add to cart
+            </button>
+        </div>
+
+        <div class="single-card">
+            <img class="image" src="./products/type.jpeg" />
+            <h1 class="name">Bata</h1>
+            <p class="desc">A very nice comfy shoe for running</p>
+            <p class="price">$2500</p>
+            <button class="button">
+                <img class="cart" src="./products/cart.png" />
+                Add to cart
+            </button>
+        </div>
+
+        <div class="single-card">
+            <img class="image" src="./products/brown.jpeg" />
+            <h1 class="name">Sparks</h1>
+            <p class="desc">A very nice comfy shoe for running</p>
+            <p class="price">$2000</p>
+            <button class="button">
+                <img class="cart" src="./products/cart.png" />
+                Add to cart
+            </button>
+        </div>
+
+        <div class="single-card">
+            <img class="image" src="./products/Classic.jpeg" />
+            <h1 class="name">Crocs</h1>
+            <p class="desc">A very nice comfy shoe for running</p>
+            <p class="price">$1000</p>
+            <button class="button">
+                <img class="cart" src="./products/cart.png" />
+                Add to cart
+            </button>
+        </div>
+
+        <div class="single-card">
+            <img class="image" src="./products/Loafers.jpeg" />
+            <h1 class="name">Loafers</h1>
+            <p class="desc">A very nice comfy shoe for running</p>
+            <p class="price">$1500</p>
+            <button class="button">
+                <img class="cart" src="./products/cart.png" />
+                Add to cart
+            </button>
+        </div>
+
+        <div class="single-card">
+            <img class="image" src="./products/Puma.jpeg" />
+            <h1 class="name">Boots</h1>
+            <p class="desc">A very nice comfy shoe for running</p>
+            <p class="price">$1000</p>
+            <button class="button">
+                <img class="cart" src="./products/cart.png" />
+                Add to cart
+            </button>
+        </div>
+
+
+
+
+
+        <!-- Other product cards can go here -->
+
+    </div>
+
+    <!-- Pop-up message -->
+    <div class="popup-message" id="popup-message">
+        One item has been added to the cart!
+    </div>
+
+    <script>
+        // Function to add item to cart
+        function addToCart(name, price, image) {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const item = { name, price, quantity: 1, image };
+
+            // Check if the item already exists in the cart
+            const existingItemIndex = cart.findIndex(cartItem => cartItem.name === name);
+            if (existingItemIndex >= 0) {
+                cart[existingItemIndex].quantity += 1; // Increment quantity if item exists
+            } else {
+                cart.push(item); // Add new item if not in cart
+            }
+
+            // Save cart back to localStorage
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            // Show the pop-up message
+            const popup = document.getElementById("popup-message");
+            popup.style.display = "block";
+            setTimeout(() => {
+                popup.style.display = "none";
+            }, 3000); // Hide the pop-up after 3 seconds
+        }
+
+        // Add event listeners to all "Add to Cart" buttons
+        document.querySelectorAll('.button').forEach((button) => {
+            button.addEventListener('click', () => {
+                const name = button.closest('.single-card').querySelector('.name').textContent;
+                const price = parseFloat(button.closest('.single-card').querySelector('.price').textContent.replace('$', ''));
+                const image = button.closest('.single-card').querySelector('img').src; // Get the image source
+                addToCart(name, price, image); // Pass the image along with other item details
+            });
+        });
+    </script>
+</body>
+</html>
