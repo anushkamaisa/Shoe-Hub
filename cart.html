@@ -1,115 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BLOOM - Cart</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
     <style>
-        .cart-item {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-        }
-
-            .cart-item img {
-                width: 50px;
-                height: 50px;
-                margin-right: 20px;
-            }
-
-        .cart-item-details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .remove-btn {
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 5px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-
-        .cart-container {
-            margin: 20px;
-        }
-
-        .total {
-            font-size: 18px;
-            margin-top: 20px;
-        }
+        .cart-item { display: flex; align-items: center; margin-bottom: 10px; }
+        .cart-item img { width: 50px; height: 50px; margin-right: 10px; }
+        .cart-item-details { flex-grow: 1; }
+        .remove-btn { background-color: red; color: white; border: none; padding: 5px; cursor: pointer; }
+        .place-order-btn { background-color: green; color: white; border: none; padding: 10px; cursor: pointer; margin-top: 20px; display: block; width: 100%; text-align: center; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo-heading">
-            <img class="logo" src="./products/logo.jpg" />
-            <a href="index.html" class="heading">BLOOM</a>
-        </div>
-
-        <div class="links">
-            <a href="SportsShoes.html">Sports Shoes</a>
-            <a href="FormalShoes.html">Formal Shoes</a>
-            <a href="cart.html">Cart</a>
-            <a href="contactus.html">Contact Us</a>
-        </div>
-    </div>
-
-    <div class="cart-container" id="cart-container">
-        <h2>Your Cart</h2>
-        <!-- Cart items will be dynamically loaded here -->
-        <div id="cart-items"></div>
-        <div class="total" id="total"></div>
-    </div>
-
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <div id="total"></div>
+    <button id="place-order" class="place-order-btn" style="display: none;">Place Order</button>
+    
     <script>
         function renderCart() {
             const cart = JSON.parse(localStorage.getItem("cart")) || [];
             const cartItemsContainer = document.getElementById("cart-items");
             const totalElement = document.getElementById("total");
+            const placeOrderButton = document.getElementById("place-order");
             let totalAmount = 0;
-
+            
             cartItemsContainer.innerHTML = ""; // Clear previous items
-
+            
             if (cart.length === 0) {
                 cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
                 totalElement.innerHTML = "";
+                placeOrderButton.style.display = "none";
                 return;
             }
-
+            
             cart.forEach((item, index) => {
-                // Create the cart item element
                 const cartItem = document.createElement("div");
                 cartItem.classList.add("cart-item");
-
-                // Add image
+                
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.classList.add("select-item");
+                checkbox.dataset.index = index;
+                checkbox.addEventListener("change", updateTotal);
+                cartItem.appendChild(checkbox);
+                
                 const img = document.createElement("img");
-                img.src = item.image; // Set the image URL from the cart
+                img.src = item.image;
                 cartItem.appendChild(img);
-
-                // Add details (name, price, and quantity)
+                
                 const details = document.createElement("div");
                 details.classList.add("cart-item-details");
-
+                
                 const name = document.createElement("p");
-                name.textContent = item.name; // Set the name from the cart
+                name.textContent = item.name;
                 details.appendChild(name);
-
-                const price = document.createElement("p");
-                price.textContent = `$${item.price}`; // Set the price from the cart
-                details.appendChild(price);
-
-                const quantity = document.createElement("p");
-                quantity.textContent = `Quantity: ${item.quantity}`; // Set the quantity from the cart
-                details.appendChild(quantity);
-
+                
+                const price = parseFloat(item.price) || 0; // Ensure price is a valid number
+                const quantity = parseInt(item.quantity) || 1; // Ensure quantity is a valid number
+                
+                const priceElement = document.createElement("p");
+                priceElement.textContent = `₹${price.toFixed(2)}`;
+                details.appendChild(priceElement);
+                
+                const quantityElement = document.createElement("p");
+                quantityElement.textContent = `Quantity: ${quantity}`;
+                details.appendChild(quantityElement);
+                
                 cartItem.appendChild(details);
-
-                // Add remove button
+                
                 const removeButton = document.createElement("button");
                 removeButton.textContent = "Remove";
                 removeButton.classList.add("remove-btn");
@@ -117,24 +77,46 @@
                     removeItem(index);
                 };
                 cartItem.appendChild(removeButton);
-
-                cartItemsContainer.appendChild(cartItem); // Append the cart item to the container
-
-                totalAmount += item.price * item.quantity; // Add the price * quantity to the total amount
+                
+                cartItemsContainer.appendChild(cartItem);
             });
-
-            totalElement.innerHTML = `<p>Total: $${totalAmount.toFixed(2)}</p>`;
+            
+            totalElement.innerHTML = `<p><strong>Total Amount: ₹0.00</strong></p>`;
+            placeOrderButton.style.display = "block"; // Show place order button
         }
-
-        // Function to remove an item from the cart
+        
         function removeItem(index) {
             const cart = JSON.parse(localStorage.getItem("cart")) || [];
-            cart.splice(index, 1); // Remove the item at the specified index
-            localStorage.setItem("cart", JSON.stringify(cart)); // Save the updated cart to localStorage
-            renderCart(); // Re-render the cart after removal
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            renderCart();
         }
-
-        // Render the cart on page load
+        
+        function updateTotal() {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const checkboxes = document.querySelectorAll(".select-item:checked");
+            let totalAmount = 0;
+            
+            checkboxes.forEach(checkbox => {
+                const index = checkbox.dataset.index;
+                const item = cart[index];
+                totalAmount += parseFloat(item.price) * parseInt(item.quantity);
+            });
+            
+            document.getElementById("total").innerHTML = `<p><strong>Total Amount: ₹${totalAmount.toFixed(2)}</strong></p>`;
+        }
+        
+        document.getElementById("place-order").addEventListener("click", function() {
+            const selectedItems = document.querySelectorAll(".select-item:checked");
+            if (selectedItems.length === 0) {
+                alert("Please select at least one item to place an order.");
+                return;
+            }
+            alert("Order placed successfully!");
+            localStorage.removeItem("cart");
+            renderCart();
+        });
+        
         window.onload = renderCart;
     </script>
 </body>
